@@ -1,4 +1,3 @@
-const axios = require("axios");
 const { cloudinary } = require("../config/cloudinary");
 const logging = require("../config/logging");
 
@@ -13,40 +12,21 @@ const getImage = async (req, res, next) => {
 	res.send(secureUrls);
 };
 
-const addMultipleImage = async (req, res, next) => {
+const addImage = async (req, res, next) => {
 	try {
-		const multipleBase64Strings = req.files;
+		const multipleBase64Strings = req.body.data;
 
-		if (!multipleBase64Strings) {
-			return res.status(400).json({ message: "No picture attached!" });
-		}
-
-		let multiplePhotosPromise = multipleBase64Strings.map((picture) => {
-			cloudinary.uploader.upload(picture, {
-				upload_preset: "dev_setups",
-			});
-		});
-
-		let imageResponses = await Promise.all(multiplePhotosPromise);
-		res.json({ images: imageResponses });
+		await cloudinary.uploader.upload(
+			multipleBase64Strings,
+			{ upload_preset: "dev_setups" },
+			(error, result) => {
+				res.json(result);
+			}
+		);
 	} catch (err) {
 		logging.error(error);
 		res.status(500).json({ err: "Upload Failed" });
 	}
 };
 
-const addSingleImage = async (req, res, next) => {
-	try {
-		const base64String = req.files;
-		const uploadResponse = await cloudinary.uploader.upload(base64String, {
-			upload_preset: "dev_setups",
-		});
-		logging.info(uploadResponse);
-		res.json({ msg: "Upload Success" });
-	} catch (error) {
-		logging.error(error);
-		res.status(500).json({ err: "Upload Failed" });
-	}
-};
-
-module.exports = { getImage, addMultipleImage, addSingleImage };
+module.exports = { getImage, addImage };

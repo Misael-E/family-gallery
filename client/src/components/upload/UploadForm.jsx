@@ -2,40 +2,40 @@ import { useState } from "react";
 import axios from "axios";
 
 const UploadForm = () => {
-	const [selectedFiles, setSelectedFiles] = useState();
+	const [selectedFiles, setSelectedFiles] = useState([]);
+	const [fileInputState, setFileInputState] = useState("");
 
 	const handleFileInputChange = (e) => {
-		const files = Array.from(e.target.files);
-
-		files.forEach((file) => {
-			const reader = new FileReader();
-			reader.onload = () => {
-				temp.push(reader.result);
-			};
-			reader.readAsDataURL(file);
-		});
+		const files = e.target.files;
+		setSelectedFiles(files);
+		setFileInputState(e.target.value);
 	};
 
 	const handleSubmitFile = async (e) => {
 		e.preventDefault();
-
 		if (!selectedFiles) return;
 
-		const params = {
-			data: selectedFiles,
+		for (const file of selectedFiles) {
+			const reader = new FileReader();
+			reader.readAsDataURL(file);
+			reader.onloadend = () => {
+				uploadImage(reader.result);
+			};
+			reader.onerror = () => {
+				console.error("File Not Valid!");
+			};
+		}
+	};
+
+	const uploadImage = async (base64EncodedImage) => {
+		const body = {
+			data: base64EncodedImage,
 		};
 
-		if (selectedFiles.length === 1) {
-			await axios.post(
-				`${process.env.REACT_APP_HOST}/api/single-upload`,
-				selectedFiles
-			);
-		} else {
-			await axios.post(
-				`${process.env.REACT_APP_HOST}/api/multiple-upload`,
-				selectedFiles
-			);
-		}
+		await axios
+			.post(`${process.env.REACT_APP_HOST}/api/upload`, body)
+			.then((response) => console.log(response))
+			.catch((err) => console.log(err));
 	};
 
 	return (
@@ -47,6 +47,7 @@ const UploadForm = () => {
 					name="image"
 					multiple
 					onChange={handleFileInputChange}
+					value={fileInputState}
 					className="form-input"
 				/>
 				<button className="btn" type="submit">
