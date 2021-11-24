@@ -1,6 +1,11 @@
 const { cloudinary } = require("../config/cloudinary");
 const logging = require("../config/logging");
 
+/**
+ * Controller for retrieving and uploading images to cloudinary
+ * @author Misael Esperanzate
+ */
+
 const getImage = async (req, res, next) => {
 	const { resources } = await cloudinary.search
 		.expression("folder:esperanzate_gallery")

@@ -1,0 +1,100 @@
+.navbar {
+	background: rgba(220, 220, 208, 0.9);
+	padding: 1.5rem;
+	display: flex;
+	justify-content: space-between;
+	color: $coolGray;
+	position: relative;
+	z-index: 99;
+
+	.navbar-logo {
+		font-weight: 600;
+		font-size: 2rem;
+	}
+
+	.menu-list {
+		list-style-type: none;
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+
+		li a {
+			text-decoration: none;
+			color: $coolGray;
+			font-weight: 300;
+			padding: 0.5rem 0.75rem;
+			margin-left: 1.5rem;
+			cursor: pointer;
+
+			&:hover,
+			&.active {
+				border-bottom: 3px solid $coolGray;
+			}
+		}
+	}
+
+	.fas {
+		cursor: pointer;
+	}
+
+	.menu-icon {
+		display: none;
+		font-size: 1.5rem;
+
+		.fa-times {
+			transform: rotate(360deg);
+			transition: all 0.2s ease-in-out;
+		}
+
+		.fa-bars {
+			transform: rotate(180deg);
+			transition: all 0.2s ease-in-out;
+		}
+	}
+}
+
+@media screen and (max-width: 800px) {
+	.navbar-logo {
+		font-size: 1.5rem;
+	}
+
+	.menu-list li a {
+		font-size: 0.75rem;
+		margin-left: 0.75rem;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	.menu-icon {
+		display: block !important;
+	}
+
+	.menu-list {
+		flex-direction: column;
+		width: 100%;
+		position: absolute;
+		background-color: rgba(220, 220, 208, 0.8);
+		padding: 1.5rem;
+		right: 0;
+		top: 5.5rem;
+		transition: all 0.5s ease-in-out;
+
+		li {
+			margin-bottom: 1.5rem;
+			width: 100%;
+			text-align: center;
+
+			&:first-child a,
+			&:last-child a {
+				width: 6rem;
+				display: block;
+				margin: auto;
+			}
+		}
+
+		&.close {
+			right: -100%;
+			transition: all 0.5s ease-in-out;
+		}
+	}
+}
