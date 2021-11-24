@@ -1,22 +1,33 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./App.css";
+import UploadForm from "./components/upload/UploadForm";
 
 const App = () => {
-	const [imageList, setImageList] = useState(null);
+	const [imageList, setImageList] = useState();
+
+	const fetchImages = async () => {
+		try {
+			axios
+				.get(`${process.env.REACT_APP_HOST}/api/photos`)
+				.then((result) => {
+					const data = result.data;
+					setImageList(data);
+				});
+		} catch (err) {
+			console.log(err);
+		}
+	};
 
 	useEffect(() => {
-		axios
-			.get(`${process.env.REACT_APP_HOST}/photo_api/photos`)
-			.then((response) => {
-				const imgUrl = response;
-				console.log(imgUrl);
-			})
-			.catch((err) => console.log(err));
+		fetchImages();
 	}, []);
 
-	console.log(imageList);
-	return <div></div>;
+	return (
+		<div>
+			<UploadForm />
+		</div>
+	);
 };
 
 export default App;
