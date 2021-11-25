@@ -13,8 +13,8 @@ const getImage = async (req, res, next) => {
 		.max_results(30)
 		.execute();
 
-	const secureUrls = resources.map((file) => file.secure_url);
-	res.send(secureUrls);
+	// const secureUrls = resources.map((file) => file.secure_url);
+	res.json(resources);
 };
 
 const addImage = async (req, res, next) => {

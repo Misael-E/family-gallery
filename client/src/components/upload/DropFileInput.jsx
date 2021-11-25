@@ -4,11 +4,14 @@ import axios from "axios";
 
 import uploadImg from "../../assets/cloud-upload-regular-240.png";
 import defaultImgIcon from "../../assets/file-blank-solid-240.png";
+import { fileToBase64Handler } from "../../utils/file-input-helper";
+import ProgressBar from "../progress-bar/ProgressBar";
 
 const DropFileInput = () => {
 	const wrapperRef = useRef(null);
 
 	const [selectedFiles, setSelectedFiles] = useState([]);
+	const [progress, setProgress] = useState(0);
 
 	const onDragEnter = () => wrapperRef.current.classList.add("dragover");
 
@@ -25,16 +28,9 @@ const DropFileInput = () => {
 		e.preventDefault();
 		if (!selectedFiles) return;
 
-		for (const file in selectedFiles) {
-			const reader = new FileReader();
-			reader.readAsDataURL(file);
-			reader.onloadend = () => {
-				uploadImage(reader.result);
-			};
-			reader.onerror = () => {
-				console.error("File Not Valid!");
-			};
-		}
+		const filePaths = await fileToBase64Handler(selectedFiles);
+		filePaths.forEach((base64File) => uploadImage(base64File));
+		setSelectedFiles([]);
 	};
 
 	const uploadImage = async (base64EncodedImage) => {
@@ -42,7 +38,14 @@ const DropFileInput = () => {
 			data: base64EncodedImage,
 		};
 
-		await axios.post(`/api/upload`, body);
+		await axios.post(`/api/upload`, body, {
+			onUploadProgress: (p) => {
+				const percentCompleted = parseInt(
+					Math.round((p.loaded * 100) / p.total)
+				);
+				setProgress(percentCompleted);
+			},
+		});
 	};
 
 	const fileRemove = (file) => {
@@ -66,7 +69,7 @@ const DropFileInput = () => {
 					<img src={uploadImg} alt="" />
 					<p>Drag & Drop your files here</p>
 				</div>
-				<form onSubmit={handleOnSubmit}>
+				<form>
 					<input
 						multiple
 						type="file"
@@ -74,6 +77,14 @@ const DropFileInput = () => {
 						onChange={onFileDrop}
 					/>
 				</form>
+			</div>
+			<div className="btn-progress-container">
+				<button className="btn" type="submit" onClick={handleOnSubmit}>
+					Submit
+				</button>
+				<div className="btn-progress">
+					<ProgressBar percent={progress} />
+				</div>
 			</div>
 			{selectedFiles.length > 0 ? (
 				<div className="file-preview">
@@ -95,9 +106,6 @@ const DropFileInput = () => {
 					))}
 				</div>
 			) : null}
-			<button className="btn" type="submit">
-				Submit
-			</button>
 		</div>
 	);
 };
