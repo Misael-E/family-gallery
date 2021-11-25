@@ -9,25 +9,31 @@ const Navbar = () => {
 	const handleClick = () => {
 		setBurger(!burger);
 	};
-	return (
-		<nav className="navbar">
-			<div className="navbar-logo">Esperanzate</div>
-			<div className="menu-icon" onClick={handleClick}>
-				<i className={burger ? "fas fa-times" : "fas fa-bars"}></i>
-			</div>
 
-			<ul className={burger ? "menu-list" : "menu-list close"}>
-				{MenuItems.map(({ title, path }, idx) => {
-					return (
-						<li key={idx}>
-							<NavLink to={path} activeClassName="active">
-								{title}
-							</NavLink>
-						</li>
-					);
-				})}
-			</ul>
-		</nav>
+	return (
+		<div className="navbar">
+			<div className="logo">Esperanzate</div>
+			<nav>
+				<ul className={burger ? "menu-list" : "menu-list close"}>
+					{MenuItems.map(({ title, path }, idx) => {
+						return (
+							<li key={idx}>
+								<NavLink
+									exact
+									to={path}
+									activeClassName="active"
+								>
+									{title}
+								</NavLink>
+							</li>
+						);
+					})}
+				</ul>
+			</nav>
+			<div className="menu-icon" onClick={handleClick}>
+				<i className={burger ? "fas fa-bars" : "fas fa-times"} />
+			</div>
+		</div>
 	);
 };
 

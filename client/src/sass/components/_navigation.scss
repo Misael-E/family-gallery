@@ -1,45 +1,25 @@
 .navbar {
-	background: rgba(220, 220, 208, 0.9);
-	padding: 1.5rem;
+	background: rgba(211, 186, 177, 0.7);
+	width: 100%;
 	display: flex;
-	justify-content: space-between;
-	color: $coolGray;
-	position: relative;
+	align-items: center;
 	z-index: 99;
+	padding-left: 5%;
+	padding-right: 5%;
+	color: $coolGray;
 
-	.navbar-logo {
+	.logo {
 		font-weight: 600;
 		font-size: 2rem;
-	}
-
-	.menu-list {
-		list-style-type: none;
-		display: flex;
-		justify-content: space-around;
-		align-items: center;
-
-		li a {
-			text-decoration: none;
-			color: $coolGray;
-			font-weight: 300;
-			padding: 0.5rem 0.75rem;
-			margin-left: 1.5rem;
-			cursor: pointer;
-
-			&:hover,
-			&.active {
-				border-bottom: 3px solid $coolGray;
-			}
-		}
-	}
-
-	.fas {
 		cursor: pointer;
+		margin: 2rem 0;
 	}
 
 	.menu-icon {
-		display: none;
+		width: 2rem;
+		cursor: pointer;
 		font-size: 1.5rem;
+		display: none;
 
 		.fa-times {
 			transform: rotate(360deg);
@@ -51,50 +31,57 @@
 			transition: all 0.2s ease-in-out;
 		}
 	}
-}
 
-@media screen and (max-width: 800px) {
-	.navbar-logo {
-		font-size: 1.5rem;
-	}
+	nav {
+		flex: 1;
+		text-align: right;
 
-	.menu-list li a {
-		font-size: 0.75rem;
-		margin-left: 0.75rem;
+		.menu-list li {
+			list-style: none;
+			display: inline-block;
+			margin-right: 2rem;
+
+			a {
+				text-decoration: none;
+				color: $coolGray;
+				font-size: 1.2rem;
+
+				&:hover,
+				&.active {
+					border-bottom: 3px solid $coolGray;
+				}
+			}
+		}
 	}
 }
 
 @media screen and (max-width: 600px) {
-	.menu-icon {
-		display: block !important;
-	}
-
-	.menu-list {
-		flex-direction: column;
+	nav .menu-list {
 		width: 100%;
+		background-color: rgba(211, 186, 177, 0.4);
 		position: absolute;
-		background-color: rgba(220, 220, 208, 0.8);
-		padding: 1.5rem;
+		top: 106px;
 		right: 0;
-		top: 5.5rem;
+		z-index: 2;
+		max-height: 0px;
 		transition: all 0.5s ease-in-out;
+		overflow: hidden !important;
 
 		li {
+			display: block !important;
+			margin-top: 1.5rem;
 			margin-bottom: 1.5rem;
-			width: 100%;
 			text-align: center;
-
-			&:first-child a,
-			&:last-child a {
-				width: 6rem;
-				display: block;
-				margin: auto;
-			}
 		}
 
 		&.close {
-			right: -100%;
+			max-height: 150px;
 			transition: all 0.5s ease-in-out;
+			overflow: hidden !important;
 		}
+	}
+
+	.menu-icon {
+		display: block !important;
 	}
 }

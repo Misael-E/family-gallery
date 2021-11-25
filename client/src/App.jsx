@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 
 import Navbar from "./components/navigation/Navbar";
 
@@ -9,10 +9,10 @@ const App = () => {
 	return (
 		<div className="container">
 			<Navbar />
-			<Routes>
-				<Route exact path="/" element={<Home />} />
-				<Route path="/upload" element={<Upload />} />
-			</Routes>
+			<Switch>
+				<Route exact path="/" component={Home} />
+				<Route path="/upload" component={Upload} />
+			</Switch>
 		</div>
 	);
 };
